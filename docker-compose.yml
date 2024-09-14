@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: wordle_backend
+    ports:
+      - "${BACK_PORT}:${BACK_PORT}"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/foo
+    depends_on:
+      - database
+    command: [
+      "poetry", "run",
+      "uvicorn", "src.app:app",
+      "--host", "${BACK_HOST}",
+      "--port", "${BACK_PORT}"
+    ]
+
+  database:
+    image: postgres:14.4-alpine
+    container_name: wordle_backend_postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+    ports:
+      - "${DATABASE_PORT}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER} -d ${DATABASE_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data

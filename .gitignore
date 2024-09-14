@@ -171,3 +171,6 @@ info.zip
 
 # gitlab CICD
 .gitlab-ci.yml
+
+# postgres local storage
+postgres-data/
