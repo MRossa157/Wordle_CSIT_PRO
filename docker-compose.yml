@@ -2,14 +2,16 @@ services:
   app:
     build:
       context: .
-      dockerfile: dockerfile
+      dockerfile: dockerfiles/back/dockerfile
     container_name: wordle_backend
     ports:
       - "${BACK_PORT}:${BACK_PORT}"
     env_file:
       - .env
     environment:
-      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/foo
+      DATABASE_URL: ${DATABASE_URL}
+      BACK_HOST: ${BACK_HOST}
+      BACK_PORT: ${BACK_PORT}
     depends_on:
       - database
     command: [
@@ -24,9 +26,12 @@ services:
     container_name: wordle_backend_postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${DATABASE_NAME}
-      POSTGRES_USER: ${DATABASE_USER}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
     ports:
       - "${DATABASE_PORT}:5432"
     healthcheck:
