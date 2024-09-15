@@ -17,3 +17,11 @@ class DBSettings(AppBaseSettings):
 class AppSettings(AppBaseSettings):
     BACK_HOST: str = Field(..., env='BACK_HOST')
     BACK_PORT: int = Field(..., env='BACK_PORT')
+
+
+class JWTSecret(AppBaseSettings):
+    JWT_SECRET: str = Field(..., env='JWT_SECRET')
+
+
+class PasswordSecret(AppBaseSettings):
+    PASSWORD_SECRET: str = Field(..., env='PASSWORD_SECRET')

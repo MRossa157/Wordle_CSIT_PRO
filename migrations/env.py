@@ -4,7 +4,7 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 
 from src.config import DBSettings
-from src.models.models import metadata
+from src.database import metadata
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -14,27 +14,27 @@ section = config.config_ini_section
 db_settings = DBSettings()
 config.set_section_option(
     section,
-    'DATABASE_HOST',
+    'DB_HOST',
     db_settings.DATABASE_HOST,
 )
 config.set_section_option(
     section,
-    'DATABASE_PORT',
+    'DB_PORT',
     db_settings.DATABASE_PORT,
 )
 config.set_section_option(
     section,
-    'DATABASE_NAME',
+    'DB_NAME',
     db_settings.DATABASE_NAME,
 )
 config.set_section_option(
     section,
-    'DATABASE_USER',
+    'DB_USER',
     db_settings.DATABASE_USER,
 )
 config.set_section_option(
     section,
-    'DATABASE_PASSWORD',
+    'DB_PASS',
     db_settings.DATABASE_PASSWORD,
 )
 
@@ -46,8 +46,6 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
 target_metadata = metadata
 
 # other values from the config, defined by the needs of env.py,
