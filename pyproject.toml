@@ -13,7 +13,6 @@ asyncpg = "^0.29.0"
 uvicorn = "^0.30.6"
 pydantic = "^2.9.1"
 pydantic-settings = "^2.5.2"
-fastapi-users = {extras = ["sqlalchemy"], version = "^13.0.0"}
 
 [tool.poetry.scripts]
 app = "src.app:app"
@@ -27,8 +26,31 @@ ruff = "0.5.5"
 line-length = 80
 
 [tool.ruff.lint]
+select = [
+	"ALL",
+]
+
 ignore = [
+	"FA",
+	"PLR0913",
+	"RUF001",
+	"RUF002",
+	"RUF003",
+	"FBT001",
+	"FBT002",
+	"SIM117", # Nested 'with'
+	"SIM118", # 'key in dict' instead 'key in dict.keys()'
+	"G004",	# Logging statement uses f-string
+	"ANN101",
+	"ANN204", # Annotations for __init__
+	"DTZ", # call datetime without timezone
 	"Q000", # single quotes
+    "CPY", # copywriting rule
+    "FAST002", # Annotated in Fast API
+    "B008", # Call Depends as default arg
+	"DOC201",
+	"FURB118",
+	"D103", # docstrings
 ]
 
 [tool.ruff.format]

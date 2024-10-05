@@ -7,33 +7,14 @@ from src.config import settings
 from src.utils.models.models import Base
 
 config = context.config
+
 section = config.config_ini_section
 
-config.set_section_option(
-    section,
-    'DB_HOST',
-    settings.DATABASE_HOST,
-)
-config.set_section_option(
-    section,
-    'DB_PORT',
-    settings.DATABASE_PORT,
-)
-config.set_section_option(
-    section,
-    'DB_NAME',
-    settings.DATABASE_NAME,
-)
-config.set_section_option(
-    section,
-    'DB_USER',
-    settings.DATABASE_USER,
-)
-config.set_section_option(
-    section,
-    'DB_PASS',
-    settings.DATABASE_PASSWORD,
-)
+config.set_section_option(section, 'DB_HOST', settings.DATABASE_HOST)
+config.set_section_option(section, 'DB_PORT', settings.DATABASE_PORT)
+config.set_section_option(section, 'DB_PASS', settings.DATABASE_PASSWORD)
+config.set_section_option(section, 'DB_NAME', settings.DATABASE_NAME)
+config.set_section_option(section, 'DB_USER', settings.DATABASE_USER)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
