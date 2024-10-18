@@ -2,7 +2,9 @@ import logging
 from sys import stderr, stdout
 from typing import TextIO
 
-_INFO_FORMAT: str = '%(asctime)s.%(msecs)3d %(levelname)s in %(name)s: %(message)s'
+_INFO_FORMAT: str = (
+    '%(asctime)s.%(msecs)3d %(levelname)s in %(name)s: %(message)s'
+)
 _ERROR_FORMAT: str = (
     '%(asctime)s.%(msecs)3d %(levelname)s in %(name)s '
     '(%(pathname)s, line %(lineno)d, %(funcName)s): %(message)s'

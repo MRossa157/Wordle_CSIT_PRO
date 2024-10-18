@@ -9,7 +9,7 @@ from src.utils.rsa_keys_manager import keys_manager
 
 
 @asynccontextmanager
-async def _lifespan(app_: FastAPI):
+async def _lifespan(app_: FastAPI):  # noqa: ANN202, ARG001
     keys_manager.generate_keys()
     async with db_manager.lifespan():
         yield

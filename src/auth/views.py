@@ -27,7 +27,6 @@ from src.auth.service import (
     get_current_active_auth_user,
     remove_access_refresh_tokens,
 )
-from src.utils.models.models import User
 
 router = APIRouter()
 
@@ -98,7 +97,7 @@ async def refresh_access_token(
             Depends(validate_refresh_token),
         ],
 ) -> JWTResponse:
-    user: User = await get_current_active_auth_user(token_payload)
+    user = await get_current_active_auth_user(token_payload)
     device_id = request.cookies.get('device_id')
 
     return get_access_refresh_tokens(
@@ -117,7 +116,7 @@ async def refresh_access_token(
         },
         include_in_schema=False,
 )
-async def check_tokens(
+async def check_tokens(  # noqa: RUF029
         request: Request,
         response: Response,
         token_payload: Annotated[
@@ -135,7 +134,7 @@ async def check_tokens(
             **API_RESPONSES['logout'],
         },
 )
-async def logout(
+async def logout(  # noqa: RUF029
         response: Response,
         token_payload: Annotated[
             Dict[str, Any],
