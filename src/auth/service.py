@@ -25,18 +25,24 @@ from src.auth.utils import (
     hash_password,
     validate_password,
 )
+from src.utils.models.models import User
 
 
 async def get_current_active_auth_user(
         token_payload: Dict[str, Any],
-) -> Dict[str, Any]:
+) -> User:
     user: Dict[str, Any] | None = await get_user_by_id(
         token_payload.get('sub'),
     )
 
     if not user:
         raise HTTP401Unauthorized(detail='Invalid token')
-    return user
+    return User(
+        id=user.get('id'),
+        username=user.get('username'),
+        password_hash=user.get('password_hash'),
+        created_at=user.get('created_at'),
+    )
 
 
 async def auth_user(

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from src.account.schemas import GameSessionResponse, UserInfoResponse
 from src.auth.schemas import JWTResponse
 
 
@@ -26,6 +27,24 @@ email_validation = _EmailValidation()
 
 
 API_RESPONSES = {
+    'user_account': {
+        200: {
+            'model': UserInfoResponse,
+            'description': 'Информация об аккаунте авторизованного'
+                           ' пользователя была успешно возвращена',
+        },
+        401: {
+            'description': 'Токен доступа пользователя не является валидным',
+        },
+    },
+    'change_user_info': {
+        200: {
+            'description': 'Данные о пользователе были изменены',
+        },
+        400: {
+            'description': 'Недействительный или истекший токен',
+        },
+    },
     'register': {
         201: {
             'description': 'Пользователь был успешно зарегистрирован',
@@ -44,24 +63,6 @@ API_RESPONSES = {
             'description': 'Пользователь ввел некорректные данные',
         },
     },
-    'tokens': {
-        200: {
-            'model': JWTResponse,
-            'description': 'Access и Refresh токены '
-                           'пользователя были успешно обновлены',
-        },
-        401: {
-            'description': 'Refresh token пользователя не является валидным',
-        },
-    },
-    'check_tokens': {
-        200: {
-            'description': 'Refresh token пользователя является валидным',
-        },
-        401: {
-            'description': 'Refresh token пользователя не является валидным',
-        },
-    },
     'logout': {
         200: {
             'model': JWTResponse,
@@ -69,6 +70,15 @@ API_RESPONSES = {
         },
         401: {
             'description': 'Refresh token пользователя не является валидным',
+        },
+    },
+    'create_game_session': {
+        200: {
+            'model': GameSessionResponse,
+            'description': 'Сессия успешно создана',
+        },
+        400: {
+            'description': 'Недействительный или истекший токен',
         },
     },
 }

@@ -13,7 +13,7 @@ class Settings(AppBaseSettings):
     DATABASE_USER: str = Field(..., env='DATABASE_USER')
     DATABASE_PASSWORD: str = Field(..., env='DATABASE_PASSWORD')
     BACK_HOST: str = Field(..., env='BACK_HOST')
-    BACK_PORT: int = Field(..., env='BACK_PORT')
+    BACK_PORT: str = Field(..., env='BACK_PORT')
 
 
 settings = Settings()

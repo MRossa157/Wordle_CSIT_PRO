@@ -69,9 +69,8 @@ async def validate_access_token(
     )
     token_payload = decoded_token.get('payload')
 
-    current_time = datetime.now()
-    time = current_time + timedelta(
-        minutes=auth_config.access_token_exp_mins)
+    current_time = datetime.utcnow()
+    time = current_time + timedelta(minutes=auth_config.access_token_exp_mins)
 
     if time > datetime.fromtimestamp(token_payload.get('exp')):
         raise HTTP401Unauthorized(detail='Invalid token type')

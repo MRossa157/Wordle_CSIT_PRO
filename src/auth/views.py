@@ -27,6 +27,7 @@ from src.auth.service import (
     get_current_active_auth_user,
     remove_access_refresh_tokens,
 )
+from src.utils.models.models import User
 
 router = APIRouter()
 
@@ -52,7 +53,6 @@ async def register_user(
 
 @router.post(
         path='/login',
-        response_model=JWTResponse,
         summary='Авторизовать существующего пользователя',
         responses={
             **API_RESPONSES['login'],
@@ -84,7 +84,6 @@ async def authorize_user(
 
 @router.put(
         path='/tokens',
-        response_model=JWTResponse,
         response_model_exclude_none=True,
         summary='Обновить access token пользователя',
         responses={
@@ -99,12 +98,12 @@ async def refresh_access_token(
             Depends(validate_refresh_token),
         ],
 ) -> JWTResponse:
-    user: Dict[str, Any] = await get_current_active_auth_user(token_payload)
+    user: User = await get_current_active_auth_user(token_payload)
     device_id = request.cookies.get('device_id')
 
     return get_access_refresh_tokens(
         response=response,
-        user_id=user.get('id'),
+        user_id=user.id,
         device_id=device_id,
     )
 
@@ -131,7 +130,6 @@ async def check_tokens(
 
 @router.post(
         path='/logout',
-        response_model=JWTResponse,
         summary='Выйти из личного кабинета пользователя',
         responses={
             **API_RESPONSES['logout'],

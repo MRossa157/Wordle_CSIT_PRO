@@ -16,6 +16,7 @@ pydantic-settings = "^2.5.2"
 bcrypt = "^4.2.0"
 pyjwt = "^2.9.0"
 cryptography = "^43.0.1"
+password-strength = "^0.0.3.post2"
 
 [tool.poetry.scripts]
 app = "src.app:app"
