@@ -36,13 +36,13 @@ async def get_authenticated_user_info(
 
 
 @router.post(
-        path='/create_new_session',
-        summary='Создать новую сессию',
+        path='/create_game_session',
+        summary='Создать новую игровую сессию',
         responses={
             **API_RESPONSES['create_game_session'],
         },
 )
-async def create_new_session(
+async def create_game_session(
         token_payload: Annotated[
             Dict[str, Any],
             Depends(validate_access_token),
