@@ -72,6 +72,24 @@ API_RESPONSES = {
             'description': 'Refresh token пользователя не является валидным',
         },
     },
+    'tokens': {
+        200: {
+            'model': JWTResponse,
+            'description': 'Access и Refresh токены '
+                           'пользователя были успешно обновлены',
+        },
+        401: {
+            'description': 'Refresh token пользователя не является валидным',
+        },
+    },
+    'check_tokens': {
+        200: {
+            'description': 'Refresh token пользователя является валидным',
+        },
+        401: {
+            'description': 'Refresh token пользователя не является валидным',
+        },
+    },
     'create_game_session': {
         200: {
             'model': GameSessionResponse,
