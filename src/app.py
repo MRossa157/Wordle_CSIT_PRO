@@ -6,6 +6,7 @@ from src.account.views import router as account_router
 from src.auth.views import router as auth_router
 from src.utils.database import db_manager
 from src.utils.rsa_keys_manager import keys_manager
+from src.wordle.views import router as wordle_router
 
 
 @asynccontextmanager
@@ -30,4 +31,10 @@ app.include_router(
     account_router,
     prefix='/account',
     tags=['account'],
+)
+
+app.include_router(
+    wordle_router,
+    prefix='/wordle',
+    tags=['wordle'],
 )

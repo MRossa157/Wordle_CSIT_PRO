@@ -7,7 +7,7 @@ from fastapi import Response
 from starlette.datastructures import MutableHeaders
 
 from src.auth.config import auth_config
-from src.auth.constants import TokenType
+from src.auth.constants import token_types
 from src.auth.crud import (
     add_user,
     get_user_by_id,
@@ -109,11 +109,11 @@ def remove_access_refresh_tokens(
         response: Response,
 ) -> JWTResponse:
     response.delete_cookie(
-        key=TokenType.ACCESS,
+        key=token_types.ACCESS,
         path='/',
     )
     response.delete_cookie(
-        key=TokenType.REFRESH,
+        key=token_types.REFRESH,
         path='/',
     )
 
@@ -132,13 +132,13 @@ def get_access_refresh_tokens(
     refresh_token: str = create_refresh_token(user_id)
 
     response.set_cookie(
-        key=TokenType.ACCESS,
+        key=token_types.ACCESS,
         value=access_token,
         httponly=True,
     )
 
     response.set_cookie(
-        key=TokenType.REFRESH,
+        key=token_types.REFRESH,
         value=refresh_token,
         httponly=True,
     )
@@ -162,11 +162,11 @@ async def confirm_user(
 
 def get_remove_tokens_headers(response: Response) -> MutableHeaders:
     response.delete_cookie(
-        key=TokenType.ACCESS,
+        key=token_types.ACCESS,
         path='/',
     )
     response.delete_cookie(
-        key=TokenType.REFRESH,
+        key=token_types.REFRESH,
         path='/',
     )
 

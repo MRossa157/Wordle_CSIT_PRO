@@ -5,7 +5,7 @@ from src.auth.schemas import JWTResponse
 
 
 @dataclass(init=False, repr=False, eq=False, frozen=True, match_args=False)
-class TokenType:
+class _TokenType:
     ACCESS: str = 'access_token'
     REFRESH: str = 'refresh_token'
 
@@ -16,14 +16,8 @@ class _UserDataValidation:
     MAX_LEN_LOGIN: int = 32
 
 
-@dataclass(init=False, repr=False, eq=False, frozen=True, match_args=False)
-class _EmailValidation:
-    MAX_LEN_EMAIL: int = 64
-    MIN_LEN_EMAIL: int = 6
-
-
 user_data_validation = _UserDataValidation()
-email_validation = _EmailValidation()
+token_types = _TokenType()
 
 
 API_RESPONSES = {

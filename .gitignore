@@ -174,3 +174,6 @@ info.zip
 
 # postgres local storage
 postgres-data/
+
+# .txt's
+*.txt

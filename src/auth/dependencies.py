@@ -7,7 +7,7 @@ from fastapi import Request, Response
 from jwt.exceptions import InvalidTokenError
 
 from src.auth.config import auth_config
-from src.auth.constants import TokenType
+from src.auth.constants import token_types
 from src.auth.crud import (
     get_user_by_username,
 )
@@ -65,7 +65,7 @@ async def validate_access_token(
 
     decoded_token = await get_current_token_decoded(
         request=request,
-        token_type=TokenType.ACCESS,
+        token_type=token_types.ACCESS,
     )
     token_payload = decoded_token.get('payload')
 
@@ -90,7 +90,7 @@ async def validate_refresh_token(
     try:
         decoded_token = await get_current_token_decoded(
             request=request,
-            token_type=TokenType.REFRESH,
+            token_type=token_types.REFRESH,
         )
     except HTTP401Unauthorized:
         raise HTTP401Unauthorized(
