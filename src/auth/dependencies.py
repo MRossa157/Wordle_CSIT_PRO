@@ -11,16 +11,14 @@ from src.auth.constants import token_types
 from src.auth.crud import (
     get_user_by_username,
 )
-from src.auth.exceptions import (
-    HTTP400BadRequest,
-    HTTP401Unauthorized,
-)
+from src.auth.exceptions import HTTP401Unauthorized
 from src.auth.schemas import UserRegistration
 from src.auth.security import OAuth2PasswordBearerWithCookie
 from src.auth.service import (
     get_remove_tokens_headers,
 )
 from src.auth.utils import decode_jwt, password_check, username_check
+from src.exceptions import HTTP400BadRequest
 
 oauth2_scheme = OAuth2PasswordBearerWithCookie(token_url='/auth/tokens')
 

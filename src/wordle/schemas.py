@@ -1,15 +1,18 @@
-from typing import Dict, Literal
+from typing import Dict
+from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-from src.wordle.constants import word_types
-
-WordStatus = Literal[
-    word_types.CORRECT,
-    word_types.NOT_CORRECT,
-    word_types.WRONG_PLACE,
-]
+from src.wordle.constants import GameStatus, WordTypes
 
 
 class WordleResponseCheckWord(BaseModel):
-    check_result: Dict[str, WordStatus]  # type: ignore  # noqa: PGH003
+    game_status: GameStatus = Field(description='Статус игры')
+    check_result: Dict[str, WordTypes] = Field(
+        description='Результат проверки слова',
+    )
+
+
+class WordleRequestCheckWord(BaseModel):
+    session_id: UUID = Field(description='ID игровой сессии')
+    word: str = Field(description='Слово для проверки')

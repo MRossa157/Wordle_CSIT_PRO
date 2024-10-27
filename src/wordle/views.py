@@ -1,8 +1,10 @@
-from uuid import UUID
 
-from fastapi import APIRouter
+from typing import Annotated
 
-from src.wordle.schemas import WordleResponseCheckWord
+from fastapi import APIRouter, Depends
+
+from src.wordle.dependencies import validate_word_data
+from src.wordle.schemas import WordleRequestCheckWord, WordleResponseCheckWord
 from src.wordle.services import check_word_service
 
 router = APIRouter()
@@ -11,13 +13,14 @@ router = APIRouter()
 @router.post(
         path='/check_word',
         summary='Проверить слово',
-        # responses={
-        #     **API_RESPONSES['check_word'],
-        # },
 )
 async def check_word(
-        session_id: UUID,
-        word: str,
+        word_data: Annotated[
+            WordleRequestCheckWord,
+            Depends(validate_word_data),
+        ],
 ) -> WordleResponseCheckWord:
-    check_result = await check_word_service(session_id=session_id, word=word)
-    return WordleResponseCheckWord(check_result=check_result)
+    return await check_word_service(
+        session_id=word_data.session_id,
+        word=word_data.word,
+    )

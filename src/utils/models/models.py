@@ -78,3 +78,42 @@ class Word(Base):
         autoincrement=True,
     )
     word = Column(String, nullable=False, unique=True)
+
+
+class GameAttempt(Base):
+    __tablename__ = 'game_attempts'
+
+    id = Column(
+        Integer,
+        primary_key=True,
+        autoincrement=True,
+        comment='ID записи',
+    )
+    session_id = Column(
+        PGUUID(as_uuid=True),
+        ForeignKey('game_sessions.session_id', ondelete='CASCADE'),
+        nullable=False,
+        comment='ID игровой сессии, к которой относится попытка',
+    )
+    owner_id = Column(
+        Integer,
+        ForeignKey('users.id', ondelete='CASCADE'),
+        nullable=False,
+        comment='Владелец попытки (ID пользователя)',
+    )
+    created_at = Column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False,
+        comment='Дата и время создания попытки',
+    )
+    attempt_number = Column(
+        Integer,
+        nullable=False,
+        comment='Номер попытки (от 1 до 6)',
+    )
+    attempt_word = Column(
+        String,
+        nullable=False,
+        comment='Слово, введенное пользователем в попытке',
+    )

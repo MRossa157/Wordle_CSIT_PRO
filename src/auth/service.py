@@ -13,7 +13,7 @@ from src.auth.crud import (
     get_user_by_id,
     get_user_by_username,
 )
-from src.auth.exceptions import HTTP400BadRequest, HTTP401Unauthorized
+from src.auth.exceptions import HTTP401Unauthorized
 from src.auth.schemas import (
     JWTResponse,
     UserAuthentication,
@@ -25,6 +25,7 @@ from src.auth.utils import (
     hash_password,
     validate_password,
 )
+from src.exceptions import HTTP400BadRequest
 from src.utils.models.models import User
 
 
