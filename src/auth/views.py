@@ -90,7 +90,6 @@ async def authorize_user(
         },
 )
 async def refresh_access_token(
-        request: Request,
         response: Response,
         token_payload: Annotated[
             Dict[str, Any],
@@ -98,12 +97,10 @@ async def refresh_access_token(
         ],
 ) -> JWTResponse:
     user = await get_current_active_auth_user(token_payload)
-    device_id = request.cookies.get('device_id')
 
     return get_access_refresh_tokens(
         response=response,
         user_id=user.id,
-        device_id=device_id,
     )
 
 

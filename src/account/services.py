@@ -6,6 +6,7 @@ from src.account.crud import (
     get_random_word_id_from_db,
     update_game_session_finish_time,
 )
+from src.wordle.constants import GameStatus
 
 
 async def create_new_game_session(owner_id: int) -> uuid.UUID:
@@ -21,6 +22,7 @@ async def create_new_game_session(owner_id: int) -> uuid.UUID:
         owner_id=owner_id,
         created_at=created_at,
         guess_word_id=guess_word_id,
+        game_state=GameStatus.IN_PROGRESS.value,
     )
 
 

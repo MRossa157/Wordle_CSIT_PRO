@@ -6,6 +6,8 @@ from sqlalchemy.dialects.postgresql import BYTEA
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.ext.declarative import declarative_base
 
+from src.wordle.constants import GameStatus
+
 Base = declarative_base()
 
 
@@ -66,6 +68,12 @@ class GameSession(Base):
         DateTime,
         nullable=True,
         comment='Дата окончания сессии',
+    )
+    game_state = Column(
+        String,
+        nullable=True,
+        default=GameStatus.IN_PROGRESS.value,
+        comment='Состояние игры (WIN, IN_PROGRESS, LOSS)',
     )
 
 

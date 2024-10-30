@@ -38,23 +38,28 @@ async def check_word_service(
         word=word,
     )
 
-    game_status = con.GameStatus.IN_PROGRESS.value
+    game_status: str = con.GameStatus.IN_PROGRESS.value
+
     if all(
         value == con.WordTypes.CORRECT.value for value in check_result.values()
     ):
         game_status = con.GameStatus.WIN.value
+
+    # -1, т.к. подсчёт попыток идет с 0
+    elif current_attempt_number >= con.MAX_ATTEMPT_NUMBER - 1:
+        game_status = con.GameStatus.LOSS.value
+
+    if game_status != con.GameStatus.IN_PROGRESS.value:
         await finish_game_by_session_id(
             session_id=session_id,
             finished_at=current_time,
+            game_state=game_status,
         )
-
-    # -1 т.к. подсчёт попыток идет с 0
-    elif current_attempt_number >= con.MAX_ATTEMPT_NUMBER - 1:
-        game_status = con.GameStatus.LOSS.value
 
     return WordleResponseCheckWord(
         game_status=game_status,
         check_result=check_result,
+        attempt_number=current_attempt_number + 1,  # Т.к. отсчёт идет с нуля
     )
 
 

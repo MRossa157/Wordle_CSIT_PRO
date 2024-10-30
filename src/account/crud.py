@@ -2,6 +2,7 @@ from datetime import datetime
 from uuid import UUID
 
 from src.utils.database import db_manager
+from src.wordle.constants import GameStatus
 
 
 async def get_random_word_id_from_db() -> int:
@@ -24,6 +25,7 @@ async def create_game_session(
     owner_id: int,
     created_at: datetime,
     guess_word_id: int,
+    game_state: GameStatus,
 ) -> UUID:
     await db_manager.pool.execute(
         """
@@ -33,15 +35,17 @@ async def create_game_session(
                 owner_id,
                 created_at,
                 finished_at,
-                guess_word_id
+                guess_word_id,
+                game_state
             )
         values
-            ($1, $2, $3, NULL, $4)
+            ($1, $2, $3, NULL, $4, $5)
         """,
         session_id,
         owner_id,
         created_at,
         guess_word_id,
+        game_state,
     )
 
     return session_id

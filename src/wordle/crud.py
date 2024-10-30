@@ -3,6 +3,7 @@ from datetime import datetime
 from uuid import UUID
 
 from src.utils.database import db_manager
+from src.wordle.constants import GameStatus
 from src.wordle.dataclasses import GameSessionInfo
 
 
@@ -109,16 +110,19 @@ async def add_attempt(
 async def finish_game_by_session_id(
         session_id: UUID,
         finished_at: datetime,
+        game_state: str,
 ) -> None:
     return await db_manager.pool.execute(
         """
         update
             game_sessions
         set
-            finished_at = $2
+            finished_at = $2,
+            game_state = $3
         where
             session_id = $1
         """,
         session_id,
         finished_at,
+        game_state,
     )

@@ -11,6 +11,7 @@ class WordleResponseCheckWord(BaseModel):
     check_result: Dict[str, WordTypes] = Field(
         description='Результат проверки слова',
     )
+    attempt_number: int = Field(description='Номер попытки')
 
 
 class WordleRequestCheckWord(BaseModel):
