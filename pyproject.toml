@@ -17,6 +17,7 @@ bcrypt = "^4.2.0"
 pyjwt = "^2.9.0"
 cryptography = "^43.0.1"
 password-strength = "^0.0.3.post2"
+greenlet = "^3.1.1"
 
 [tool.poetry.scripts]
 app = "src.app:app"
@@ -24,7 +25,7 @@ app = "src.app:app"
 [tool.poetry.group.dev.dependencies]
 isort = "^5.13.2"
 black = "^24.4.2"
-ruff = "0.5.5"
+ruff = "0.5.6"
 
 [tool.ruff]
 line-length = 80
