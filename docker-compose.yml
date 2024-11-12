@@ -15,10 +15,12 @@ services:
     depends_on:
       - database
     command: [
-      "poetry", "run",
-      "uvicorn", "src.app:app",
-      "--host", "${BACK_HOST}",
-      "--port", "${BACK_PORT}"
+      "sh", "-c",
+      "poetry run alembic upgrade head &&
+      poetry run uvicorn
+      src.app:app
+      --host ${BACK_HOST}
+      --port ${BACK_PORT}"
     ]
 
   database:
