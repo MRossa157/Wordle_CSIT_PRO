@@ -15,6 +15,8 @@ from src.auth.exceptions import HTTP401Unauthorized
 from src.auth.schemas import UserRegistration
 from src.auth.security import OAuth2PasswordBearerWithCookie
 from src.auth.service import (
+    get_access_refresh_tokens,
+    get_current_active_auth_user,
     get_remove_tokens_headers,
 )
 from src.auth.utils import decode_jwt, password_check, username_check
@@ -42,35 +44,43 @@ async def validate_user_creation(
 
 async def get_current_token_decoded(
         request: Request,
+        response: Response,
         token_type: str,
 ) -> Dict[str, Any]:
-    token = await oauth2_scheme(request, token_type=token_type)
-
     try:
+        token = await oauth2_scheme(request, token_type=token_type)
         token_payload: Dict[str, Any] = decode_jwt(token)
-    except InvalidTokenError as e:
-        raise HTTP401Unauthorized(detail='Invalid token') from e
-
-    return {
-        'token': token,
-        'payload': token_payload,
-    }
+        return {
+            'token': token,
+            'payload': token_payload,
+        }
+    except InvalidTokenError:
+        if token_type != token_types.ACCESS:
+            raise HTTP401Unauthorized(detail='Invalid token')
+    try:
+        new_token_payload = await refresh_access_token(request, response)
+        return {
+            'payload': new_token_payload,
+        }
+    except InvalidTokenError:
+        raise HTTP401Unauthorized(detail='Invalid token')
 
 
 async def validate_access_token(
         request: Request,
+        response: Response,
 ) -> Dict[str, Any]:
 
     decoded_token = await get_current_token_decoded(
         request=request,
+        response=response,
         token_type=token_types.ACCESS,
     )
     token_payload = decoded_token.get('payload')
 
     current_time = datetime.utcnow()
-    time = current_time + timedelta(minutes=auth_config.access_token_exp_mins)
 
-    if time > datetime.fromtimestamp(token_payload.get('exp')):
+    if current_time >= datetime.fromtimestamp(token_payload.get('exp')):
         raise HTTP401Unauthorized(detail='Invalid token type')
 
     token_type: str | None = token_payload.get('type')
@@ -88,6 +98,7 @@ async def validate_refresh_token(
     try:
         decoded_token = await get_current_token_decoded(
             request=request,
+            response=response,
             token_type=token_types.REFRESH,
         )
     except HTTP401Unauthorized:
@@ -109,3 +120,22 @@ async def validate_refresh_token(
         detail='Invalid token type for refresh',
         headers=get_remove_tokens_headers(response),
     )
+
+
+async def refresh_access_token(
+    request: Request,
+    response: Response,
+) -> Dict | None:
+    token_payload = await validate_refresh_token(request, response)
+    user: Dict[str, Any] = await get_current_active_auth_user(token_payload)
+    device_id = request.cookies.get('device_id')
+
+    new_tokens = await get_access_refresh_tokens(
+        response=response,
+        user_id=user.get('id'),
+        device_id=device_id,
+        is_remembered=True,
+    )
+    new_token_payload = decode_jwt(new_tokens.access_token)
+
+    return new_token_payload

@@ -8,9 +8,8 @@ Create Date: 2024-10-27 15:41:44.105839
 
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = "737c730857b3"
@@ -52,7 +51,7 @@ def upgrade() -> None:
             "attempt_number",
             sa.Integer(),
             nullable=False,
-            comment="Номер попытки (от 1 до 6)",
+            comment="Номер попытки (от 0 до 5)",
         ),
         sa.ForeignKeyConstraint(
             ["owner_id"], ["users.id"], ondelete="CASCADE"

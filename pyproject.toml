@@ -18,6 +18,7 @@ pyjwt = "^2.9.0"
 cryptography = "^43.0.1"
 password-strength = "^0.0.3.post2"
 greenlet = "^3.1.1"
+apscheduler = "^3.10.4"
 
 [tool.poetry.scripts]
 app = "src.app:app"

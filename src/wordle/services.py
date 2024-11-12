@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Dict
+from typing import Dict, List
 from uuid import UUID
 
 from src.wordle import constants as con
@@ -7,7 +7,9 @@ from src.wordle.crud import (
     add_attempt,
     finish_game_by_session_id,
     get_game_session_info_by_session_id,
+    get_game_sessions_by_user_id,
 )
+from src.wordle.dtos import UserGameSession
 from src.wordle.schemas import WordleResponseCheckWord
 
 
@@ -81,3 +83,10 @@ def compare_words(guess: str, target: str) -> Dict[str, con.WordTypes]:
                 result[letter] = con.WordTypes.NOT_CORRECT.value
 
     return result
+
+
+async def get_all_user_gamesessions(user_id: int) -> List[UserGameSession]:
+    """
+    Возвращает все игровые сессии пользователя и базовую информацию по ним.
+    """
+    return await get_game_sessions_by_user_id(user_id)

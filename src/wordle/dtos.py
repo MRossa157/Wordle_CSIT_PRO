@@ -5,6 +5,13 @@ from uuid import UUID
 
 
 @dataclass
+class UserGameSession:
+    session_id: UUID
+    game_state: str
+    attempts_info: Dict[int, str]
+
+
+@dataclass
 class GameSessionInfo:
     session_id: UUID
     owner_id: int

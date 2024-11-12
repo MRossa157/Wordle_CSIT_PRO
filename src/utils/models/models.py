@@ -118,7 +118,7 @@ class GameAttempt(Base):
     attempt_number = Column(
         Integer,
         nullable=False,
-        comment='Номер попытки (от 1 до 6)',
+        comment='Номер попытки (от 0 до 5)',
     )
     attempt_word = Column(
         String,
