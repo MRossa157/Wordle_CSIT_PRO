@@ -3,7 +3,6 @@ from datetime import datetime
 from typing import List
 from uuid import UUID
 
-from src.account.schemas import GameSessionsResponse
 from src.utils.database import db_manager
 from src.wordle.dtos import GameSessionInfo, UserGameSession
 

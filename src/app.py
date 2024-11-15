@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.account.views import router as account_router
 from src.auth.views import router as auth_router
+from src.leaderboard.views import router as leaderboard_router
 from src.security import cors_settings
 from src.utils.database import db_manager
 from src.utils.rsa_keys_manager import keys_manager
@@ -43,6 +44,12 @@ app.include_router(
     wordle_router,
     prefix='/wordle',
     tags=['wordle'],
+)
+
+app.include_router(
+    leaderboard_router,
+    prefix='/leaderboard',
+    tags=['leaderboard'],
 )
 
 

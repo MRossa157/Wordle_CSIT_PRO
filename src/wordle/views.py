@@ -36,7 +36,9 @@ async def create_game_session(
 
 @router.get(
         path='/game_sessions',
-        summary='Получить список всех игровых сессий которые были у пользователя',
+        summary=(
+            'Получить список всех игровых сессий которые были у пользователя'
+        ),
 )
 async def get_game_sessions(
         token_payload: Annotated[
