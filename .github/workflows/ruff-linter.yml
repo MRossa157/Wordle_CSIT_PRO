@@ -1,0 +1,36 @@
+name: Run Ruff Linter
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - dev
+
+jobs:
+  ruff:
+    name: Lint with Ruff
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10.7'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -  # Устанавливаем Poetry
+          echo "$HOME/.local/bin" >> $GITHUB_PATH  # Добавляем Poetry в PATH
+
+      - name: Install dependencies using Poetry
+        run: |
+          poetry install
+
+      - name: Run Ruff linter
+        run: |
+          ruff check .  # Запускаем линтер на текущей директории
