@@ -14,7 +14,7 @@ async def load_words_from_file(file_path: str) -> None:
         password=settings.DATABASE_PASSWORD,
     )
 
-    with open(file_path, 'r') as file:
+    with open(file_path) as file:  # noqa: ASYNC230
         words = [line.strip() for line in file if line.strip()]
 
     async with pool.acquire() as connection, connection.transaction():

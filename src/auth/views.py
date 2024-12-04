@@ -114,7 +114,7 @@ async def refresh_access_token(
         },
         include_in_schema=False,
 )
-async def check_tokens(  # noqa: RUF029
+async def check_tokens(
         request: Request,
         response: Response,
         token_payload: Annotated[
@@ -132,7 +132,7 @@ async def check_tokens(  # noqa: RUF029
             **API_RESPONSES['logout'],
         },
 )
-async def logout(  # noqa: RUF029
+async def logout(
         response: Response,
         token_payload: Annotated[
             Dict[str, Any],

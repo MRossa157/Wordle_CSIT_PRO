@@ -32,14 +32,43 @@ ruff = "0.5.6"
 [tool.ruff]
 line-length = 80
 
+exclude = [
+    "**/migrations/*",
+    "**/tests/*",
+    "**/__init__.py",
+    "**/__pycache__",
+    "**/conftest.py",
+]
+
 [tool.ruff.lint]
 select = [
 	"ALL",
 ]
 
 ignore = [
+    "D",
 	"Q000", # single quotes
+    "RUF001",
+    "RUF002",
+    "RUF003",
+    "CPY",
+    "FBT001",
+    "FBT002",
+    "FA100",
+    "FA102",
+    "FURB118",
+    "DTZ",
+    "FAST001",
+    "DOC",
+    "ANN003",
+    "PTH",
+    "B904",
+    "TRY300",
+    "TRY301",
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"crud.py" = ["E501"]
 
 [tool.ruff.format]
 quote-style = "single"
