@@ -6,7 +6,7 @@ from typing import Any, Dict, Optional
 from fastapi import Response
 from starlette.datastructures import MutableHeaders
 
-from src.auth.config import auth_config
+from src.auth.config import auth_config, cookie_config
 from src.auth.constants import token_types
 from src.auth.crud import (
     add_user,
@@ -97,13 +97,20 @@ def create_access_token(
     )
 
 
-def create_refresh_token(user_id: int) -> str:
+def create_refresh_token(user_id: int, is_remembered: bool = True) -> str:
     token_data: Dict[str, Any] = {
         'sub': user_id,
+        'is_remembered': is_remembered,
     }
-    expiration_time = timedelta(
-        days=auth_config.refresh_token_exp_days,
-    )
+    if is_remembered:
+        expiration_time = timedelta(
+            days=auth_config.long_refresh_token_exp_days,
+        )
+    else:
+        expiration_time = timedelta(
+            days=auth_config.short_refresh_token_exp_days,
+        )
+
     return create_jwt(
         token_type='refresh',
         token_data=token_data,
@@ -133,20 +140,29 @@ def remove_access_refresh_tokens(
 def get_access_refresh_tokens(
         response: Response,
         user_id: int,
+        is_remembered: bool,
 ) -> JWTResponse:
     access_token: str = create_access_token(user_id)
-    refresh_token: str = create_refresh_token(user_id)
+    refresh_token: str = create_refresh_token(
+        user_id=user_id,
+        is_remembered=is_remembered,
+    )
 
     response.set_cookie(
         key=token_types.ACCESS,
         value=access_token,
+        path='/',
+        secure=cookie_config.secure,
         httponly=True,
+        samesite=cookie_config.samesite,
     )
-
     response.set_cookie(
         key=token_types.REFRESH,
         value=refresh_token,
+        path='/',
+        secure=cookie_config.secure,
         httponly=True,
+        samesite=cookie_config.samesite,
     )
 
     return JWTResponse(

@@ -78,16 +78,14 @@ async def validate_access_token(
     except HTTP401Unauthorized:
         return None
 
-    token_payload = decoded_token.get('payload')
+    token_payload: Dict[str, Any] = decoded_token.get('payload')
 
     current_time = datetime.utcnow()
 
     if current_time >= datetime.fromtimestamp(token_payload.get('exp')):
         raise HTTP401Unauthorized(detail='Invalid token type')
 
-    token_type: str | None = token_payload.get('type')
-
-    if token_type == 'access':
+    if token_payload.get('type') == 'access':
         return token_payload
 
     raise HTTP401Unauthorized(detail='Invalid token type')
@@ -125,17 +123,15 @@ async def validate_refresh_token(
 
 
 async def refresh_access_token(
-    request: Request,
-    response: Response,
+        request: Request,
+        response: Response,
 ) -> Dict | None:
     token_payload = await validate_refresh_token(request, response)
     user: Dict[str, Any] = await get_current_active_auth_user(token_payload)
-    device_id = request.cookies.get('device_id')
 
-    new_tokens = await get_access_refresh_tokens(
+    new_tokens = get_access_refresh_tokens(
         response=response,
-        user_id=user.get('id'),
-        device_id=device_id,
+        user_id=user.id,
         is_remembered=True,
     )
 

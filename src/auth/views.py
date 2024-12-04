@@ -12,6 +12,7 @@ from fastapi import (
 )
 from starlette.responses import JSONResponse
 
+from src.auth.config import cookie_config
 from src.auth.constants import API_RESPONSES
 from src.auth.dependencies import validate_refresh_token, validate_user_creation
 from src.auth.schemas import (
@@ -72,13 +73,17 @@ async def authorize_user(
         response.set_cookie(
             key='device_id',
             value=device_id,
-            httponly=True,
             max_age=31536000,
+            path='/',
+            httponly=True,
+            secure=cookie_config.secure,
+            samesite=cookie_config.samesite,
         )
 
     return get_access_refresh_tokens(
         response=response,
         user_id=user.id,
+        is_remembered=True,
     )
 
 
@@ -102,6 +107,7 @@ async def refresh_access_token(
     return get_access_refresh_tokens(
         response=response,
         user_id=user.id,
+        is_remembered=True,
     )
 
 
