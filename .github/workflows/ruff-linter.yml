@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - dev
   push:
     branches:
       - dev
@@ -33,4 +34,4 @@ jobs:
 
       - name: Run Ruff linter
         run: |
-          ruff check .  # Запускаем линтер на текущей директории
+          poetry run ruff check .  # Запускаем линтер на текущей директории
