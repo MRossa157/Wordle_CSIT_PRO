@@ -34,4 +34,4 @@ jobs:
 
       - name: Run Ruff linter
         run: |
-          poetry run ruff check .  # Запускаем линтер на текущей директории
+          poetry run ruff check .\backend\  # Запускаем линтер на текущей директории

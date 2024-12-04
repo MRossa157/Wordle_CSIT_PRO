@@ -14,7 +14,10 @@ from starlette.responses import JSONResponse
 
 from backend.auth.config import cookie_config
 from backend.auth.constants import API_RESPONSES
-from backend.auth.dependencies import validate_refresh_token, validate_user_creation
+from backend.auth.dependencies import (
+    validate_refresh_token,
+    validate_user_creation,
+)
 from backend.auth.schemas import (
     JWTResponse,
     UserAuthentication,
