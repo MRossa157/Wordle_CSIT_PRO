@@ -1,8 +1,10 @@
+# ruff: noqa: ERA001
+
 from typing import Annotated, Any, Dict
 
 from fastapi import APIRouter, Depends
 
-from src.account.schemas import GameSessionResponse, GameSessionsResponse
+from src.account.schemas import GameSessionResponse
 from src.account.services import create_new_game_session
 from src.auth.constants import API_RESPONSES
 from src.auth.dependencies import validate_access_token
@@ -13,7 +15,7 @@ from src.wordle.schemas import (
     WordleResponseCheckWord,
     WordleResponseCheckWordFinish,
 )
-from src.wordle.services import check_word_service, get_all_user_gamesessions
+from src.wordle.services import check_word_service
 
 router = APIRouter()
 
