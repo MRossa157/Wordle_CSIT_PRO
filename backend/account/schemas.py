@@ -1,0 +1,22 @@
+from typing import List, Optional
+from uuid import UUID
+
+from pydantic import BaseModel
+
+from backend.wordle.dtos import UserGameSession
+
+
+class UserInfoResponse(BaseModel):
+    username: str
+
+
+class UserInfo(BaseModel):
+    username: Optional[str] = None
+
+
+class GameSessionResponse(BaseModel):
+    session_id: UUID
+
+
+class GameSessionsResponse(BaseModel):
+    user_sessions: List[UserGameSession]

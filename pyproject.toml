@@ -23,7 +23,7 @@ apscheduler = "^3.10.4"
 black = "^24.4.2"
 
 [tool.poetry.scripts]
-app = "src.app:app"
+app = "backend.app:app"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.13.2"
