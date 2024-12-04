@@ -1,6 +1,6 @@
 import json
 from contextlib import asynccontextmanager
-from typing import Any, AsyncGenerator
+from typing import AsyncGenerator
 
 from asyncpg import Pool, create_pool
 from asyncpg.connection import Connection
@@ -24,7 +24,7 @@ class _DatabaseManager:
         return self.__pool
 
     @asynccontextmanager
-    async def lifespan(self) -> AsyncGenerator[None, Any, None]:
+    async def lifespan(self) -> AsyncGenerator[None, None]:
         """
         Контекстный менеджер для управления временем жизни пула соединений.
         Использовать только для инициализации и завершения работы приложения.
