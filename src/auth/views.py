@@ -44,7 +44,7 @@ async def register_user(
             UserRegistration,
             Depends(validate_user_creation),
         ],
-) -> None:
+) -> str:
     await confirm_user(
         user_data=user_data,
     )

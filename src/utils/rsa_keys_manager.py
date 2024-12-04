@@ -11,8 +11,8 @@ _KEY_SIZE: int = 2048
 
 class _RSAKeysManager:
     def __init__(self) -> None:
-        self.__private_key = None
-        self.__public_key = None
+        self.__private_key: RSAPrivateKey | None = None
+        self.__public_key: RSAPublicKey | None = None
 
     def generate_keys(self) -> None:
         """
