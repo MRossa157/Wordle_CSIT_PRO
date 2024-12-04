@@ -48,6 +48,7 @@ async def register_user(
     await confirm_user(
         user_data=user_data,
     )
+    return 'Registration successful'
 
 
 @router.post(

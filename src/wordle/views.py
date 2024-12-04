@@ -8,7 +8,11 @@ from src.auth.constants import API_RESPONSES
 from src.auth.dependencies import validate_access_token
 from src.auth.service import get_current_active_auth_user
 from src.wordle.dependencies import validate_word_data
-from src.wordle.schemas import WordleRequestCheckWord, WordleResponseCheckWord
+from src.wordle.schemas import (
+    WordleRequestCheckWord,
+    WordleResponseCheckWord,
+    WordleResponseCheckWordFinish,
+)
 from src.wordle.services import check_word_service, get_all_user_gamesessions
 
 router = APIRouter()
@@ -27,9 +31,11 @@ async def create_game_session(
             Depends(validate_access_token),
         ],
 ) -> GameSessionResponse:
-    user = await get_current_active_auth_user(token_payload)
-
-    session_id = await create_new_game_session(user.id)
+    if token_payload:
+        user = await get_current_active_auth_user(token_payload)
+        session_id = await create_new_game_session(owner_id=user.id)
+    else:
+        session_id = await create_new_game_session()
 
     return GameSessionResponse(session_id=session_id)
 
@@ -62,8 +68,19 @@ async def check_word(
             WordleRequestCheckWord,
             Depends(validate_word_data),
         ],
-) -> WordleResponseCheckWord:
+        token_payload: Annotated[
+            Dict[str, Any],
+            Depends(validate_access_token),
+        ],
+) -> WordleResponseCheckWord | WordleResponseCheckWordFinish:
+    if token_payload:
+        user = await get_current_active_auth_user(token_payload)
+        user_id = user.id
+    else:
+        user_id = None
+
     return await check_word_service(
         session_id=word_data.session_id,
         word=word_data.word,
+        user_id=user_id,
     )

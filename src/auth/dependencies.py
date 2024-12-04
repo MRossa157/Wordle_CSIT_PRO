@@ -1,12 +1,11 @@
 # ruff: noqa: S106, S105
 
-from datetime import datetime, timedelta
-from typing import Any, Dict
+from datetime import datetime
+from typing import Any, Dict, Optional
 
 from fastapi import Request, Response
 from jwt.exceptions import InvalidTokenError
 
-from src.auth.config import auth_config
 from src.auth.constants import token_types
 from src.auth.crud import (
     get_user_by_username,
@@ -69,13 +68,16 @@ async def get_current_token_decoded(
 async def validate_access_token(
         request: Request,
         response: Response,
-) -> Dict[str, Any]:
+) -> Optional[Dict[str, Any]]:
+    try:
+        decoded_token = await get_current_token_decoded(
+            request=request,
+            response=response,
+            token_type=token_types.ACCESS,
+        )
+    except HTTP401Unauthorized:
+        return None
 
-    decoded_token = await get_current_token_decoded(
-        request=request,
-        response=response,
-        token_type=token_types.ACCESS,
-    )
     token_payload = decoded_token.get('payload')
 
     current_time = datetime.utcnow()
@@ -136,6 +138,5 @@ async def refresh_access_token(
         device_id=device_id,
         is_remembered=True,
     )
-    new_token_payload = decode_jwt(new_tokens.access_token)
 
-    return new_token_payload
+    return decode_jwt(new_tokens.access_token)

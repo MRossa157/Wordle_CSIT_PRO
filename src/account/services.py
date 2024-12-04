@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from typing import Optional
 
 from src.account.crud import (
     create_game_session,
@@ -9,11 +10,10 @@ from src.account.crud import (
 from src.wordle.constants import GameStatus
 
 
-async def create_new_game_session(owner_id: int) -> uuid.UUID:
+async def create_new_game_session(owner_id: Optional[int] = None) -> uuid.UUID:
     """
     Создает новую игровую сессию для пользователя.
     """
-
     created_at = datetime.utcnow()
     session_id = uuid.uuid4()
     guess_word_id = await get_random_word_id()

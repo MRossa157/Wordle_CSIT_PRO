@@ -21,8 +21,12 @@ async def get_game_sessions(
             Dict[str, Any],
             Depends(validate_access_token),
         ],
-        top_n: int = 20,  # default top 10
+        top_n: int = 10,  # default top 10
 ) -> LeaderboardResponse:
-    user = await get_current_active_auth_user(token_payload)
+    if token_payload:
+        user = await get_current_active_auth_user(token_payload)
+        user_id = user.id
+    else:
+        user_id = None
 
-    return await get_leaderboard_info(user_id=user.id, top_n=top_n)
+    return await get_leaderboard_info(top_n=top_n, user_id=user_id)

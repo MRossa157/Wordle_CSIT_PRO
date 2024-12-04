@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 from uuid import UUID
 
 from src.utils.database import db_manager
@@ -22,7 +23,7 @@ async def get_random_word_id_from_db() -> int:
 
 async def create_game_session(
     session_id: UUID,
-    owner_id: int,
+    owner_id: Optional[int],
     created_at: datetime,
     guess_word_id: int,
     game_state: GameStatus,

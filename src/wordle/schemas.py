@@ -14,6 +14,10 @@ class WordleResponseCheckWord(BaseModel):
     attempt_number: int = Field(description='Номер попытки')
 
 
+class WordleResponseCheckWordFinish(WordleResponseCheckWord):
+    word_to_guess: str = Field(description='Угадываемое слово')
+
+
 class WordleRequestCheckWord(BaseModel):
     session_id: UUID = Field(description='ID игровой сессии')
     word: str = Field(description='Слово для проверки')

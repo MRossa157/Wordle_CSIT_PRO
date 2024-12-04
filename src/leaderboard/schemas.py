@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -10,5 +10,5 @@ class UserStats(BaseModel):
 
 
 class LeaderboardResponse(BaseModel):
-    user_stats: UserStats
+    user_stats: Optional[UserStats]
     leaderboard_stats: List[UserStats]

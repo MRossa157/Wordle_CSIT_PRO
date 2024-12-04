@@ -30,8 +30,13 @@ from src.utils.models.models import User
 
 
 async def get_current_active_auth_user(
-        token_payload: Dict[str, Any],
+        token_payload: Optional[Dict[str, Any]],
 ) -> User:
+    if token_payload is None:
+        raise HTTP401Unauthorized(
+            detail='Authorization required. Please provide a valid token',
+        )
+
     user: Dict[str, Any] | None = await get_user_by_id(
         token_payload.get('sub'),
     )

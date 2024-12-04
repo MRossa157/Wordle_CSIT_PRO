@@ -1,6 +1,8 @@
 from datetime import datetime
-from typing import Dict, List
+from typing import Dict, List, Optional
 from uuid import UUID
+
+from fastapi import HTTPException, status
 
 from src.wordle import constants as con
 from src.wordle.crud import (
@@ -10,12 +12,16 @@ from src.wordle.crud import (
     get_game_sessions_by_user_id,
 )
 from src.wordle.dtos import UserGameSession
-from src.wordle.schemas import WordleResponseCheckWord
+from src.wordle.schemas import (
+    WordleResponseCheckWord,
+    WordleResponseCheckWordFinish,
+)
 
 
 async def check_word_service(
-    session_id: UUID,
-    word: str,
+        session_id: UUID,
+        word: str,
+        user_id: Optional[int],
 ) -> WordleResponseCheckWord:
     """
     Проверяет слово на соответствие правилам игры Wordle.
@@ -23,6 +29,12 @@ async def check_word_service(
     current_time = datetime.utcnow()
 
     game_session_info = await get_game_session_info_by_session_id(session_id)
+    if game_session_info.owner_id != user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail='Only the session creator is allowed to submit a word.',
+        )
+
     # текущая попытка = предыдущая + 1
     current_attempt_number = (
         max(game_session_info.attempts_info.keys()) + 1
@@ -56,6 +68,12 @@ async def check_word_service(
             session_id=session_id,
             finished_at=current_time,
             game_state=game_status,
+        )
+        return WordleResponseCheckWordFinish(
+            game_status=game_status,
+            check_result=check_result,
+            attempt_number=current_attempt_number + 1,
+            word_to_guess=game_session_info.word,
         )
 
     return WordleResponseCheckWord(

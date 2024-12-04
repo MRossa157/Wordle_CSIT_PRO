@@ -1,5 +1,6 @@
 from typing import List
 
+from src.leaderboard.constants import NUMBER_PRECISION
 from src.leaderboard.schemas import UserStats
 from src.utils.database import db_manager
 
@@ -11,9 +12,9 @@ async def get_user_stats(user_id: int) -> UserStats:
             u.username,
             count(case when gs.game_state = 'WIN' then 1 end) as wins_count,
             coalesce(
-                count(case when gs.game_state = 'WIN' then 1 end) * 1.0 /
-                nullif(count(case when gs.game_state = 'LOSS' then 1 end), 0),
-                1
+                nullif(count(case when gs.game_state = 'WIN' then 1 end), 0) * 1.0 /
+                nullif(count(case when gs.game_state in ('WIN', 'LOSS') then 1 end), 0),
+                0
             ) as "w/l"
         from
             users u
@@ -31,7 +32,7 @@ async def get_user_stats(user_id: int) -> UserStats:
     return UserStats(
         username=result['username'],
         wins_count=result['wins_count'],
-        w_l=result['w/l'],
+        w_l=round(result['w/l'], NUMBER_PRECISION),
     )
 
 
@@ -42,9 +43,9 @@ async def get_leaderboard_stats(top_n: int) -> List[UserStats]:
             u.username,
             count(case when gs.game_state = 'WIN' then 1 end) as wins_count,
             coalesce(
-                count(case when gs.game_state = 'WIN' then 1 end) * 1.0 /
-                nullif(count(case when gs.game_state = 'LOSS' then 1 end), 0),
-                1
+                nullif(count(case when gs.game_state = 'WIN' then 1 end), 0) * 1.0 /
+                nullif(count(case when gs.game_state in ('WIN', 'LOSS') then 1 end), 0),
+                0
             ) as "w/l"
         from
             users u
@@ -66,7 +67,7 @@ async def get_leaderboard_stats(top_n: int) -> List[UserStats]:
         UserStats(
             username=item['username'],
             wins_count=item['wins_count'],
-            w_l=item['w/l'],
+            w_l=round(item['w/l'], NUMBER_PRECISION),
         )
         for item in result
     ]

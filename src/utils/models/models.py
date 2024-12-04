@@ -49,7 +49,7 @@ class GameSession(Base):
     )
     owner_id = Column(
         Integer,
-        nullable=False,
+        nullable=True,
         comment='Владелец сессии',
     )
     guess_word_id = Column(
@@ -71,7 +71,7 @@ class GameSession(Base):
     )
     game_state = Column(
         String,
-        nullable=True,
+        nullable=False,
         default=GameStatus.IN_PROGRESS.value,
         comment='Состояние игры (WIN, IN_PROGRESS, LOSS)',
     )
@@ -106,7 +106,7 @@ class GameAttempt(Base):
     owner_id = Column(
         Integer,
         ForeignKey('users.id', ondelete='CASCADE'),
-        nullable=False,
+        nullable=True,
         comment='Владелец попытки (ID пользователя)',
     )
     created_at = Column(
