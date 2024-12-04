@@ -57,9 +57,9 @@ const Leaderboard: React.FC = () => {
         <thead>
           <tr>
             <th>Место</th>
-            <th>Имя пользователя</th>
+            <th>Имя</th>
             <th>Победы</th>
-            <th>Отношение W/L</th>
+            <th>W/L</th>
           </tr>
         </thead>
         <tbody>

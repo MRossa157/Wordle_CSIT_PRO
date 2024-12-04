@@ -227,7 +227,7 @@ nav h1 {
 .leaderboard {
   position: absolute;
   height: 60vh;
-  right: 70px;
+  right: 1%;
   top: 100px;
   margin: 20px;
   font-family: Arial, sans-serif;
@@ -411,6 +411,10 @@ tr:nth-child(even) {
   to {
       opacity: 0;
   }
+}
+
+@media screen {
+  
 }
 
 
