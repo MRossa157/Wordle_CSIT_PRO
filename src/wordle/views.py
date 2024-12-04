@@ -40,23 +40,23 @@ async def create_game_session(
     return GameSessionResponse(session_id=session_id)
 
 
-@router.get(
-        path='/game_sessions',
-        summary=(
-            'Получить список всех игровых сессий которые были у пользователя'
-        ),
-)
-async def get_game_sessions(
-        token_payload: Annotated[
-            Dict[str, Any],
-            Depends(validate_access_token),
-        ],
-) -> GameSessionsResponse:
-    user = await get_current_active_auth_user(token_payload)
+# @router.get(
+#         path='/game_sessions',
+#         summary=(
+#             'Получить список всех игровых сессий которые были у пользователя'
+#         ),
+# )
+# async def get_game_sessions(
+#         token_payload: Annotated[
+#             Dict[str, Any],
+#             Depends(validate_access_token),
+#         ],
+# ) -> GameSessionsResponse:
+#     user = await get_current_active_auth_user(token_payload)
 
-    return GameSessionsResponse(
-        user_sessions=await get_all_user_gamesessions(user.id),
-    )
+#     return GameSessionsResponse(
+#         user_sessions=await get_all_user_gamesessions(user.id),
+#     )
 
 
 @router.post(

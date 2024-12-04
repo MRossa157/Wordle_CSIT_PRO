@@ -13,4 +13,4 @@ class GameStatus(Enum):
 class WordTypes(Enum):
     CORRECT: str = 'GREEN'
     WRONG_PLACE: str = 'YELLOW'
-    NOT_CORRECT: str = 'RED'
+    NOT_CORRECT: str = 'BLACK'
