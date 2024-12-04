@@ -1,7 +1,7 @@
 import "../App.css";
 import Board, { boardDefault } from "./Board";
 import Keyboard from "./Keyboard";
-import React, { useState, createContext, useEffect, useCallback } from "react";
+import React, { useState, createContext, useEffect } from "react";
 import GameOver from "./GameOver";
 import  Popup from "./Popup"
 
@@ -61,18 +61,18 @@ function Game() {
     setPopupMessage(null);
   };
 
-  const resetGame = useCallback(() => {
+  const resetGame = () => {
     const newBoard = board.map((row) => row.map(() => ""));
     setBoard(newBoard);
     setCurrAttempt({ attempt: 0, letter: 0 });
     setGameOver({ gameOver: false, guessedWord: false });
     setCheckResults({});
     setKeyValColor({});
-  }, [board]);
+  };
   
   useEffect(() => {
     resetGame();
-  }, [resetGame]);
+  }, []);
   
 
   const onEnter = async () => {
