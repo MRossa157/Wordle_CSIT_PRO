@@ -16,7 +16,6 @@ const Leaderboard: React.FC = () => {
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
         const response = await fetch("http://localhost:5002/leaderboard/?top_n=20", {
@@ -28,16 +27,20 @@ const Leaderboard: React.FC = () => {
         const data: LeaderboardResponse = await response.json();
         setUserStats(data.user_stats);
         setLeaderboard(data.leaderboard_stats);
-        console.log(data)
       } catch (error) {
         console.error("Error fetching leaderboard:", error);
       } finally {
         setLoading(false);
       }
     };
+  
+    fetchLeaderboard();
+  
 
+  useEffect(() => {
     fetchLeaderboard();
   }, []);
+  
 
   if (loading) {    
     return <div className="leaderboard">Загрузка списка лидеров...</div>;

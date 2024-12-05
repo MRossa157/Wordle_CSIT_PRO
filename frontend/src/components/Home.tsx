@@ -9,10 +9,17 @@ interface UserInfo {
   username: string;
 }
 
+
+
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const resetLeaderboard = () => {
+    sessionStorage.removeItem("userStats");
+    setUserInfo(null);
+  };
 
   const refreshTokens = async (): Promise<boolean> => {
     try {
@@ -85,6 +92,7 @@ const Home: React.FC = () => {
       if (response.ok) {
         sessionStorage.removeItem("userInfo");
         setUserInfo(null);
+        resetLeaderboard();
         navigate("/");
       } else {
         console.error("Ошибка при выходе из аккаунта");
